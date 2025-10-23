@@ -1,0 +1,171 @@
+/* Basic Dark Mode & Reset */
+:root {
+  --background: #121212;
+  --surface: #1e1e1e;
+  --primary: #2b2b2b;
+  --on-surface: #e0e0e0;
+  --green: #4ade80;
+  --red: #f87171;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: var(--background);
+  color: var(--on-surface);
+}
+
+/* Page Wrapper */
+.page-wrapper {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* === Homepage === */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.home-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.btn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-green {
+  background-color: var(--green);
+  color: var(--background);
+}
+
+.notes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* === Note Card === */
+.note-card {
+  background-color: var(--surface);
+  border: 1px solid var(--primary);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--on-surface);
+  transition: transform 0.2s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--green);
+}
+
+.note-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--green);
+}
+
+.note-card p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  /* Truncate long text */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.note-card span {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+/* === Form Pages (Create / Edit) === */
+.form-page {
+  max-width: 700px;
+  margin: 1rem auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  background: none;
+  border: 1px solid var(--primary);
+  color: var(--on-surface);
+  padding: 0.5rem 1rem;
+}
+
+.btn-red {
+  background-color: var(--red);
+  color: var(--background);
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.note-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--primary);
+  color: var(--on-surface);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  min-height: 250px;
+  resize: vertical;
+}
+
+.form-actions {
+  text-align: right;
+}
