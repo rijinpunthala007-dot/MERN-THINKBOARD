@@ -1,103 +1,104 @@
 import Note from "../models/noteModel.js";
 import mongoose from "mongoose";
+import asyncHandler from 'express-async-handler';
 
-// @desc    Get all notes
+// @desc    Get all notes for the logged-in user
 // @route   GET /api/notes
-// @access  Public
-export const getAllNotes = async (req, res) => {
-  try {
-    const notes = await Note.find({}).sort({ createdAt: -1 });
-    res.status(200).json(notes);
-  } catch (error) {
-    res.status(500).json({ message: "Server error fetching notes" });
-  }
-};
+// @access  Private
+export const getAllNotes = asyncHandler(async (req, res) => {
+  // Only fetch notes linked to the logged-in user (req.user._id is set by protect middleware)
+  const notes = await Note.find({ user: req.user._id }).sort({ createdAt: -1 }); 
+  res.status(200).json(notes);
+});
 
-// @desc    Get a single note by ID
+// @desc    Get a single note by ID for the logged-in user
 // @route   GET /api/notes/:id
-// @access  Public
-// 👇 THIS IS THE NEW FUNCTION
-export const getNoteById = async (req, res) => {
+// @access  Private
+export const getNoteById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // Check if ID is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ message: "Note not found" });
   }
 
-  try {
-    const note = await Note.findById(id);
-    if (!note) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-    res.status(200).json(note);
-  } catch (error) {
-    res.status(500).json({ message: "Server error fetching note" });
+  // Find note AND ensure it belongs to the logged-in user
+  const note = await Note.findOne({ _id: id, user: req.user._id }); 
+  
+  if (!note) {
+    return res.status(404).json({ message: "Note not found" });
   }
-};
+  res.status(200).json(note);
+});
 
-// @desc    Create a new note
+// @desc    Create a new note and link it to the user
 // @route   POST /api/notes
-// @access  Public
-export const createANote = async (req, res) => {
+// @access  Private
+export const createANote = asyncHandler(async (req, res) => {
   const { title, content } = req.body;
 
-  try {
-    if (!title || !content) {
-      return res.status(400).json({ message: "Please fill in all fields" });
-    }
-    const newNote = new Note({ title, content });
-    const savedNote = await newNote.save();
-    res.status(201).json(savedNote);
-  } catch (error) {
-    res.status(500).json({ message: "Server error creating note" });
+  if (!title || !content) {
+    res.status(400);
+    throw new Error("Please fill in all fields");
   }
-};
 
-// @desc    Update a note
+  const newNote = new Note({
+    user: req.user._id, // LINK THE NOTE TO THE LOGGED-IN USER
+    title,
+    content,
+  });
+  
+  const savedNote = await newNote.save();
+  res.status(201).json(savedNote);
+});
+
+// @desc    Update a note for the logged-in user
 // @route   PUT /api/notes/:id
-// @access  Public
-export const updateNote = async (req, res) => {
+// @access  Private
+export const updateNote = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ message: "Note not found" });
   }
+  
+  // Find note AND ensure it belongs to the logged-in user
+  const note = await Note.findOne({ _id: id, user: req.user._id }); 
 
-  try {
-    const updatedNote = await Note.findByIdAndUpdate(
-      id,
-      { title, content },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedNote) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-    res.status(200).json(updatedNote);
-  } catch (error) {
-    res.status(500).json({ message: "Server error updating note" });
+  if (!note) {
+    res.status(404);
+    throw new Error("Note not found or you don't own it");
   }
-};
 
-// @desc    Delete a note
+  // Perform the update
+  const updatedNote = await Note.findByIdAndUpdate(
+    id,
+    { title, content },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json(updatedNote);
+});
+
+// @desc    Delete a note for the logged-in user
 // @route   DELETE /api/notes/:id
-// @access  Public
-export const DeleteNote = async (req, res) => {
+// @access  Private
+export const DeleteNote = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ message: "Note not found" });
   }
 
-  try {
-    const deletedNote = await Note.findByIdAndDelete(id);
-    if (!deletedNote) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-    res.status(200).json({ message: "Note deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error deleting note" });
+  // Find note AND ensure it belongs to the logged-in user
+  const note = await Note.findOne({ _id: id, user: req.user._id }); 
+
+  if (!note) {
+    res.status(404);
+    throw new Error("Note not found or you don't own it");
   }
-};
+  
+  await Note.findByIdAndDelete(id);
+
+  res.status(200).json({ message: "Note deleted successfully" });
+});

@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./src/config/db.js";
 import notesRoute from "./src/routes/notesRoute.js";
+import userRoutes from "./src/routes/userRoutes.js"; // <-- 1. IMPORT USER ROUTES
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import asyncHandler from 'express-async-handler';
@@ -26,7 +27,28 @@ app.use(limiter);
 app.use(express.json());
 
 // --- Routes ---
+app.use("/api/users", userRoutes); // <-- 2. CONNECT USER ROUTES
+
 app.use("/api/notes", notesRoute);
+
+// ----------------------------------------------------------------
+// --- ERROR HANDLING MIDDLEWARE ---
+// ----------------------------------------------------------------
+// This middleware must be after all routes
+app.use((err, req, res, next) => {
+  // If response was already sent, don't try to send it again
+  if (res.headersSent) {
+    return next(err);
+  }
+  
+  // Use the status code from response if set, otherwise default to 500
+  const statusCode = res.statusCode >= 400 ? res.statusCode : 500;
+  
+  res.status(statusCode).json({
+    message: err.message || 'Server Error',
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+});
 
 // ----------------------------------------------------------------
 // --- DEPLOYMENT LOGIC (Serving the React Frontend) ---

@@ -1,21 +1,23 @@
 import express from "express";
 import {
   createANote,
-  DeleteNote,
+  deleteNote,
   getAllNotes,
-  getNoteById, // <-- 1. Import new function
+  getNoteById,
   updateNote,
 } from "../controllers/notesController.js";
+import protect from '../middleware/authMiddleware.js'; // <-- 1. IMPORT PROTECT
 
 const router = express.Router();
 
-router.get("/", getAllNotes);
-router.post("/", createANote);
+// Apply protect middleware to ALL note routes
+router.route("/")
+    .get(protect, getAllNotes) // 2. PROTECTED
+    .post(protect, createANote); // 2. PROTECTED
 
-// 👇 2. ADD THIS NEW ROUTE
-router.get("/:id", getNoteById);
-
-router.put("/:id", updateNote);
-router.delete("/:id", DeleteNote);
+router.route("/:id")
+    .get(protect, getNoteById) // 2. PROTECTED
+    .put(protect, updateNote) // 2. PROTECTED
+    .delete(protect, deleteNote); // 2. PROTECTED
 
 export default router;
