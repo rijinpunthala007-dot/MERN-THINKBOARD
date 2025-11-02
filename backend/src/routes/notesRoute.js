@@ -1,23 +1,23 @@
 import express from "express";
 import {
   createANote,
-  deleteNote,
+  DeleteNote, // ✅ CORRECT: Capital 'D' to match the controller export
   getAllNotes,
   getNoteById,
   updateNote,
 } from "../controllers/notesController.js";
-import protect from '../middleware/authMiddleware.js'; // <-- 1. IMPORT PROTECT
+import protect from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Apply protect middleware to ALL note routes
 router.route("/")
-    .get(protect, getAllNotes) // 2. PROTECTED
-    .post(protect, createANote); // 2. PROTECTED
+    .get(protect, getAllNotes)
+    .post(protect, createANote);
 
 router.route("/:id")
-    .get(protect, getNoteById) // 2. PROTECTED
-    .put(protect, updateNote) // 2. PROTECTED
-    .delete(protect, deleteNote); // 2. PROTECTED
+    .get(protect, getNoteById)
+    .put(protect, updateNote)
+    .delete(protect, DeleteNote); // ✅ Use the correct name here too
 
 export default router;
