@@ -34,6 +34,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap; /* Allows elements to wrap on small screens */
 }
 
 .home-header h1 {
@@ -211,37 +212,7 @@ body {
   color: #a8ffb8; /* Lighter green on hover */
 }
 
-/* === Mobile Layout Fix (Stacking Buttons) === */
-@media (max-width: 600px) {
-  /* 1. Stacks the main header elements (Title and Buttons) */
-  .home-header {
-    flex-direction: column;
-    align-items: flex-start; 
-    margin-bottom: 1.5rem;
-  }
-  
-  /* 2. Selects the container holding the two buttons */
-  .home-header > div {
-    display: flex;
-    flex-direction: column; /* Forces the two buttons to stack vertically */
-    width: 100%; /* Makes the buttons full width */
-    gap: 0.5rem; /* Adds space between the stacked buttons */
-    margin-top: 1rem;
-  }
-
-  /* 3. Makes buttons full width and ensures proper padding */
-  .home-header .btn {
-    width: 100%;
-    margin-right: 0 !important; /* Removes the fixed margin that caused overlap */
-    text-align: center;
-  }
-
-  /* Fixes the Logout button padding */
-  .home-header .btn-back {
-    padding: 0.75rem 1.25rem; 
-  }
-}
-/* === New Header Layout Fix === */
+/* === Mobile Header and Button Positioning Fix === */
 
 /* Positions the Logout button to the top right */
 .header-logout-btn {
@@ -257,15 +228,17 @@ body {
     justify-content: flex-end; /* Pushes the button to the right on desktop */
 }
 
-/* === Fix Mobile Stack (Simple) === */
+/* === Mobile Stacking Logic (Max-width 600px) === */
 @media (max-width: 600px) {
   .home-header {
     /* Ensures the header itself stacks elements */
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
+    justify-content: space-between; /* Keeps elements spaced out */
+    align-items: flex-start;
   }
 
   .home-header h1 {
-    /* Allows space for the Logout button next to the title on small screens */
+    /* Gives space for the Logout button next to the title on small screens */
     width: 60%; 
   }
   
@@ -273,5 +246,18 @@ body {
     /* Ensures Logout button is in the top right corner */
     align-self: flex-start; 
     margin-top: 0.25rem;
+  }
+
+  /* Pushes the + New Note button to the next line and makes it full width */
+  .new-note-container {
+      order: 1; /* Forces it below the h1 and logout button */
+      width: 100%;
+      margin-top: 1rem;
+      justify-content: center; /* Centers the button on small screen */
+  }
+  
+  .new-note-container .btn {
+      width: 100%; /* Makes the New Note button full width */
+      text-align: center;
   }
 }
