@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllNotes } from "../api"; // <-- 1. Import our API function
+import { fetchAllNotes } from "../api";
+import { useUserContext } from "../context/UserContext.jsx"; // <-- IMPORT CONTEXT
 
 // --- NoteCard Component ---
-// We moved this from the main component so it's cleaner
-// It now takes a 'note' object as a prop
 const NoteCard = ({ note }) => {
   return (
-    // 2. Link to the correct, dynamic URL
     <Link to={`/note/${note._id}`} className="note-card">
       <h3>{note.title}</h3>
       <p>{note.content}</p>
@@ -18,36 +16,44 @@ const NoteCard = ({ note }) => {
 
 // --- Homepage Component ---
 const Homepage = () => {
-  // 3. Set up state to hold your data, loading status, and errors
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const { token, logout } = useUserContext(); // <-- GET LOGOUT AND TOKEN
 
-  // 4. Use useEffect to fetch data when the page loads
+  // Use useEffect to fetch data when the page loads
   useEffect(() => {
     const getNotes = async () => {
       try {
         setLoading(true);
-        const res = await fetchAllNotes();
-        setNotes(res.data); // 5. Put the notes from the API into our state
+        // The token is automatically sent by the API client interceptor
+        const res = await fetchAllNotes(); 
+        setNotes(res.data);
         setError(null);
       } catch (err) {
         console.error("Error fetching notes:", err);
-        setError("Failed to load notes. Please try again.");
+        // On a 401 Unauthorized error (token expired), force logout
+        if (err.response && err.response.status === 401) {
+            logout();
+        }
+        setError("Failed to load notes. Please log in again.");
       } finally {
         setLoading(false);
       }
     };
 
-    getNotes(); // Call the function
-  }, []); // The empty array [] means this runs only once on mount
+    if (token) {
+        getNotes();
+    }
+  }, [token, logout]); // Rerun when token changes
 
-  // 6. Handle loading and error states
   if (loading) {
     return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
   }
 
   if (error) {
+    // Show error message or prompt to log in if token is missing
     return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
   }
 
@@ -56,12 +62,17 @@ const Homepage = () => {
     <div>
       <header className="home-header">
         <h1>ThinkBoard</h1>
-        <Link to="/create" className="btn btn-green">
-          + New Note
-        </Link>
+        <div>
+            <Link to="/create" className="btn btn-green" style={{marginRight: '1rem'}}>
+              + New Note
+            </Link>
+            {/* LOGOUT BUTTON */}
+            <button onClick={logout} className="btn btn-back">
+              Logout
+            </button>
+        </div>
       </header>
 
-      {/* 7. Map over the real notes and render a NoteCard for each one */}
       <div className="notes-list">
         {notes.length > 0 ? (
           notes.map((note) => (
