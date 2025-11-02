@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllNotes } from "../api";
-import { useUserContext } from "../context/UserContext.jsx"; // <-- IMPORT CONTEXT
+import { fetchAllNotes } from "../api/index.js";
+import { useUserContext } from "../context/UserContext.jsx";
 
 // --- NoteCard Component ---
 const NoteCard = ({ note }) => {
@@ -20,7 +20,7 @@ const Homepage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const { token, logout } = useUserContext(); // <-- GET LOGOUT AND TOKEN
+  const { token, logout } = useUserContext(); // Get logout function and token
 
   // Use useEffect to fetch data when the page loads
   useEffect(() => {
@@ -53,7 +53,6 @@ const Homepage = () => {
   }
 
   if (error) {
-    // Show error message or prompt to log in if token is missing
     return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
   }
 
@@ -61,15 +60,19 @@ const Homepage = () => {
   return (
     <div>
       <header className="home-header">
+        
         <h1>ThinkBoard</h1>
-        <div>
-            <Link to="/create" className="btn btn-green" style={{marginRight: '1rem'}}>
+        
+        {/* LOGOUT BUTTON: Positioned next to h1 for the top-right placement */}
+        <button onClick={logout} className="btn btn-back header-logout-btn">
+          Logout
+        </button>
+        
+        {/* + NEW NOTE BUTTON: Placed in a separate container for responsive stacking */}
+        <div className="new-note-container">
+            <Link to="/create" className="btn btn-green">
               + New Note
             </Link>
-            {/* LOGOUT BUTTON */}
-            <button onClick={logout} className="btn btn-back">
-              Logout
-            </button>
         </div>
       </header>
 
