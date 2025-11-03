@@ -64,14 +64,14 @@ const Homepage = () => {
         
         {/* BUTTONS CONTAINER: Both buttons together for desktop, separated for mobile */}
         <div className="header-buttons-container">
-          <button onClick={logout} className="btn btn-back header-logout-btn">
-            Logout
-          </button>
           <div className="new-note-container">
             <Link to="/create" className="btn btn-green">
               + New Note
             </Link>
           </div>
+          <button onClick={logout} className="btn btn-back header-logout-btn">
+            Logout
+          </button>
         </div>
       </header>
 
