@@ -212,15 +212,12 @@ body {
   color: #a8ffb8; /* Lighter green on hover */
 }
 
-/* === Mobile Header and Button Positioning Fix === */
-
-/* Positions the Logout button to the top right */
+/* === Desktop Header Layout (Default) === */
 .header-logout-btn {
-  /* Aligns the button with the right side of the container */
+  /* Desktop: Aligns the button with the right side of the container */
   margin-left: auto;
 }
 
-/* Forces the New Note button below the header for mobile */
 .new-note-container {
     width: 100%;
     margin-top: 1rem;
@@ -231,21 +228,27 @@ body {
 /* === Mobile Stacking Logic (Max-width 600px) === */
 @media (max-width: 600px) {
   .home-header {
-    /* Ensures the header itself stacks elements */
-    flex-wrap: wrap;
-    justify-content: space-between; /* Keeps elements spaced out */
-    align-items: flex-start;
+    /* Mobile: Position title and logout on same row */
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
   }
 
   .home-header h1 {
-    /* Gives space for the Logout button next to the title on small screens */
-    width: 60%; 
+    /* Title takes available space but allows logout to sit on right */
+    flex: 1;
+    margin: 0;
   }
   
   .header-logout-btn {
-    /* Ensures Logout button is in the top right corner */
-    align-self: flex-start; 
-    margin-top: 0.25rem;
+    /* Mobile: Position logout button in top right corner, next to title */
+    margin-left: auto;
+    margin-top: 0;
+    align-self: center;
+    flex-shrink: 0; /* Prevents button from shrinking */
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 
   /* Pushes the + New Note button to the next line and makes it full width */
