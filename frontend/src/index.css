@@ -229,10 +229,9 @@ body {
 @media (max-width: 600px) {
   .home-header {
     /* Mobile: Position title and logout on same row */
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    position: relative;
+    align-items: flex-start;
   }
 
   .home-header h1 {
@@ -244,14 +243,14 @@ body {
   .header-logout-btn {
     /* Mobile: Position logout button in top right corner, next to title */
     margin-left: auto;
-    margin-top: 0;
-    align-self: center;
+    margin-top: 0.25rem;
+    align-self: flex-start;
     flex-shrink: 0; /* Prevents button from shrinking */
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
 
-  /* Pushes the + New Note button to the next line and makes it full width */
+  /* Keep the + New Note button in its original position below the header */
   .new-note-container {
       order: 1; /* Forces it below the h1 and logout button */
       width: 100%;
