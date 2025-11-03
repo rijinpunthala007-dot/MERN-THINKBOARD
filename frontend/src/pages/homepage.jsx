@@ -67,7 +67,7 @@ const Homepage = () => {
         <div className="header-title-section">
           <h1>ThinkBoard</h1>
           {username && (
-            <p className="welcome-message">Welcome back, {username}!</p>
+            <p className="welcome-message">Welcome to ThinkBoard, {username}!</p>
           )}
         </div>
         
