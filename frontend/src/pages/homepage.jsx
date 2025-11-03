@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllNotes } from "../api";
 import { useUserContext } from "../context/UserContext.jsx";
-import { getUsernameFromEmail } from "../utils/helpers";
+import { getUsernameFromEmail } from "../utils/helpers.js";
 
 // --- NoteCard Component ---
 const NoteCard = ({ note }) => {
@@ -48,11 +48,14 @@ const Homepage = () => {
 
     if (token) {
         getNotes();
+    } else {
+      // If no token, set loading to false immediately
+      setLoading(false);
     }
   }, [token, logout]); // Rerun when token changes
 
   if (loading) {
-    return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
+    return <div style={{ textAlign: "center", marginTop: "2rem", color: "var(--on-surface)" }}>Loading...</div>;
   }
 
   if (error) {
@@ -60,7 +63,14 @@ const Homepage = () => {
   }
 
   // Get username from email for welcome message
-  const username = user?.email ? getUsernameFromEmail(user.email) : '';
+  const username = user?.email ? (() => {
+    try {
+      return getUsernameFromEmail(user.email);
+    } catch (err) {
+      console.error('Error extracting username:', err);
+      return '';
+    }
+  })() : '';
 
   // Auto-hide welcome message after 6 seconds
   useEffect(() => {
