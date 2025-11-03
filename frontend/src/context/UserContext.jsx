@@ -13,22 +13,39 @@ export const useUserContext = () => {
 export const UserProvider = ({ children }) => {
   // Try to load user info from local storage on initial load
   const [user, setUser] = useState(() => {
-    const userInfo = localStorage.getItem('userInfo');
-    return userInfo ? JSON.parse(userInfo) : null;
+    try {
+      const userInfo = localStorage.getItem('userInfo');
+      return userInfo ? JSON.parse(userInfo) : null;
+    } catch (error) {
+      console.error('Error loading user from localStorage:', error);
+      return null;
+    }
   });
 
   // 3. Login function: Saves user info and token to state and local storage
   const login = (userInfo) => {
-    setUser(userInfo);
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    toast.success('Successfully logged in!');
+    try {
+      setUser(userInfo);
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      toast.success('Successfully logged in!');
+    } catch (error) {
+      console.error('Error saving user to localStorage:', error);
+      setUser(userInfo); // Still set user in state even if localStorage fails
+      toast.success('Successfully logged in!');
+    }
   };
 
   // 4. Logout function: Clears state and local storage
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('userInfo');
-    toast.success('Logged out successfully.');
+    try {
+      setUser(null);
+      localStorage.removeItem('userInfo');
+      toast.success('Logged out successfully.');
+    } catch (error) {
+      console.error('Error removing user from localStorage:', error);
+      setUser(null); // Still clear user from state
+      toast.success('Logged out successfully.');
+    }
     // The App component will handle the redirect
   };
 

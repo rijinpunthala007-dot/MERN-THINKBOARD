@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './context/UserContext.jsx'; // <-- IMPORT PROVIDER
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 
 const rootElement = document.getElementById("root");
 
@@ -13,11 +14,13 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    {/* Wrap the entire app with the UserProvider */}
-    <UserProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </UserProvider>
+    <ErrorBoundary>
+      {/* Wrap the entire app with the UserProvider */}
+      <UserProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UserProvider>
+    </ErrorBoundary>
   </StrictMode>
 );

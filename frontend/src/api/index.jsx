@@ -8,13 +8,19 @@ const API = axios.create({
 
 // 2. Add an Interceptor to attach the JWT token to every request
 API.interceptors.request.use((req) => {
-  // Get user info (which includes the token) from local storage
-  const userInfo = localStorage.getItem('userInfo');
-  
-  if (userInfo) {
-    const user = JSON.parse(userInfo);
-    // Attach the token to the Authorization header
-    req.headers.Authorization = `Bearer ${user.token}`;
+  try {
+    // Get user info (which includes the token) from local storage
+    const userInfo = localStorage.getItem('userInfo');
+    
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+      // Attach the token to the Authorization header
+      if (user.token) {
+        req.headers.Authorization = `Bearer ${user.token}`;
+      }
+    }
+  } catch (error) {
+    console.error('Error accessing localStorage in API interceptor:', error);
   }
   
   return req;
