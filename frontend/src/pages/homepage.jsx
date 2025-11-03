@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchAllNotes } from "../api/index.js";
+import { fetchAllNotes } from "../api";
 import { useUserContext } from "../context/UserContext.jsx";
 
 // --- NoteCard Component ---
