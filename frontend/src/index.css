@@ -37,9 +37,24 @@ body {
   flex-wrap: wrap; /* Allows elements to wrap on small screens */
 }
 
+.header-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .home-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
+  margin: 0;
+}
+
+.welcome-message {
+  font-size: 0.95rem;
+  color: var(--green);
+  opacity: 0.9;
+  margin: 0;
+  font-weight: 500;
 }
 
 .btn {
@@ -241,10 +256,18 @@ body {
     align-items: flex-start;
   }
 
+  .header-title-section {
+    flex: 1;
+  }
+  
   .home-header h1 {
     /* Title takes available space but allows logout to sit on right */
-    flex: 1;
+    font-size: 2rem;
     margin: 0;
+  }
+  
+  .welcome-message {
+    font-size: 0.85rem;
   }
   
   .header-buttons-container {

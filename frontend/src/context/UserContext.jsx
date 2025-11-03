@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { getUsernameFromEmail } from '../utils/helpers';
 
 // 1. Create the Context object
 const UserContext = createContext();
@@ -21,7 +22,11 @@ export const UserProvider = ({ children }) => {
   const login = (userInfo) => {
     setUser(userInfo);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    toast.success('Successfully logged in!');
+    const username = getUsernameFromEmail(userInfo.email);
+    toast.success(`Welcome to ThinkBoard, ${username}!`, {
+      duration: 4000,
+      icon: '👋',
+    });
   };
 
   // 4. Logout function: Clears state and local storage

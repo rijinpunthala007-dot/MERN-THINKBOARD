@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchAllNotes } from "../api";
 import { useUserContext } from "../context/UserContext.jsx";
+import { getUsernameFromEmail } from "../utils/helpers";
 
 // --- NoteCard Component ---
 const NoteCard = ({ note }) => {
@@ -20,7 +21,7 @@ const Homepage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const { token, logout } = useUserContext(); // Get logout function and token
+  const { user, token, logout } = useUserContext(); // Get user info, logout function and token
 
   // Use useEffect to fetch data when the page loads
   useEffect(() => {
@@ -56,11 +57,19 @@ const Homepage = () => {
     return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
   }
 
+  // Get username from email for welcome message
+  const username = user?.email ? getUsernameFromEmail(user.email) : '';
+
   // --- JSX to render ---
   return (
     <div>
       <header className="home-header">
-        <h1>ThinkBoard</h1>
+        <div className="header-title-section">
+          <h1>ThinkBoard</h1>
+          {username && (
+            <p className="welcome-message">Welcome back, {username}!</p>
+          )}
+        </div>
         
         {/* BUTTONS CONTAINER: Both buttons together for desktop, separated for mobile */}
         <div className="header-buttons-container">
