@@ -20,6 +20,8 @@ const Homepage = () => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(true); // Control welcome message visibility
+  const [isFadingOut, setIsFadingOut] = useState(false); // Track fade-out animation
   
   const { user, token, logout } = useUserContext(); // Get user info, logout function and token
 
@@ -60,14 +62,58 @@ const Homepage = () => {
   // Get username from email for welcome message
   const username = user?.email ? getUsernameFromEmail(user.email) : '';
 
+  // Auto-hide welcome message after 6 seconds
+  useEffect(() => {
+    if (username && showWelcome && !isFadingOut) {
+      const timer = setTimeout(() => {
+        setIsFadingOut(true);
+        // Remove from DOM after fade animation completes (0.5s)
+        setTimeout(() => {
+          setShowWelcome(false);
+          setIsFadingOut(false);
+        }, 500);
+      }, 6000); // 6 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [username, showWelcome, isFadingOut]);
+
+  // Reset welcome message when user changes (new login)
+  useEffect(() => {
+    if (user) {
+      setShowWelcome(true);
+      setIsFadingOut(false);
+    }
+  }, [user?._id]); // Reset when user ID changes
+
+  // Handle manual dismiss
+  const handleDismissWelcome = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setShowWelcome(false);
+      setIsFadingOut(false);
+    }, 500);
+  };
+
   // --- JSX to render ---
   return (
     <div>
       <header className="home-header">
         <div className="header-title-section">
           <h1>ThinkBoard</h1>
-          {username && (
-            <p className="welcome-message">Welcome to ThinkBoard, {username}!</p>
+          {username && showWelcome && (
+            <div className="welcome-message-container">
+              <p className={`welcome-message ${isFadingOut ? 'fade-out' : 'fade-in'}`}>
+                Welcome to ThinkBoard, {username}!
+              </p>
+              <button 
+                className="welcome-close-btn"
+                onClick={handleDismissWelcome}
+                aria-label="Dismiss welcome message"
+              >
+                ×
+              </button>
+            </div>
           )}
         </div>
         
