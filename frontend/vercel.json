@@ -1,8 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/|.*\\.(?:svg|png|jpg|jpeg|gif|ico|css|js|json|woff|woff2|ttf|eot)).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/vite.svg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
