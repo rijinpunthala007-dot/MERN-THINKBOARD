@@ -60,19 +60,18 @@ const Homepage = () => {
   return (
     <div>
       <header className="home-header">
-        
         <h1>ThinkBoard</h1>
         
-        {/* LOGOUT BUTTON: Positioned next to h1 for the top-right placement */}
-        <button onClick={logout} className="btn btn-back header-logout-btn">
-          Logout
-        </button>
-        
-        {/* + NEW NOTE BUTTON: Placed in a separate container for responsive stacking */}
-        <div className="new-note-container">
+        {/* BUTTONS CONTAINER: Both buttons together for desktop, separated for mobile */}
+        <div className="header-buttons-container">
+          <button onClick={logout} className="btn btn-back header-logout-btn">
+            Logout
+          </button>
+          <div className="new-note-container">
             <Link to="/create" className="btn btn-green">
               + New Note
             </Link>
+          </div>
         </div>
       </header>
 

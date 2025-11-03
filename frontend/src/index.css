@@ -213,16 +213,20 @@ body {
 }
 
 /* === Desktop Header Layout (Default) === */
+.header-buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header-logout-btn {
-  /* Desktop: Aligns the button with the right side of the container */
-  margin-left: auto;
+  /* Desktop: Same size as new note button */
+  flex-shrink: 0;
 }
 
 .new-note-container {
-    width: 100%;
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-end; /* Pushes the button to the right on desktop */
+  display: flex;
+  flex-shrink: 0;
 }
 
 /* === Mobile Stacking Logic (Max-width 600px) === */
@@ -240,12 +244,16 @@ body {
     margin: 0;
   }
   
+  .header-buttons-container {
+    /* Mobile: Separate buttons - logout next to title, new note below */
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+  
   .header-logout-btn {
     /* Mobile: Position logout button in top right corner, next to title */
-    margin-left: auto;
     margin-top: 0.25rem;
-    align-self: flex-start;
-    flex-shrink: 0; /* Prevents button from shrinking */
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
