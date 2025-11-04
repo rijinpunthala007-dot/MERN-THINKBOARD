@@ -54,14 +54,6 @@ const Homepage = () => {
     }
   }, [token, logout]); // Rerun when token changes
 
-  if (loading) {
-    return <div style={{ textAlign: "center", marginTop: "2rem", color: "var(--on-surface)" }}>Loading...</div>;
-  }
-
-  if (error) {
-    return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
-  }
-
   // Get username from email for welcome message
   const username = user?.email ? (() => {
     try {
@@ -95,6 +87,14 @@ const Homepage = () => {
       setIsFadingOut(false);
     }
   }, [user?._id]); // Reset when user ID changes
+
+  if (loading) {
+    return <div style={{ textAlign: "center", marginTop: "2rem", color: "var(--on-surface)" }}>Loading...</div>;
+  }
+
+  if (error) {
+    return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
+  }
 
   // Handle manual dismiss
   const handleDismissWelcome = () => {

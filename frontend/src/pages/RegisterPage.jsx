@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext.jsx';
-import { register } from "../api"; // ✅ Correct Path
+import { register } from "../api";
 import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
