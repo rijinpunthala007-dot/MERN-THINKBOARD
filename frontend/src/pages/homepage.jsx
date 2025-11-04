@@ -22,6 +22,17 @@ const Homepage = () => {
   const [error, setError] = useState(null);
   const [showWelcome, setShowWelcome] = useState(true); // Control welcome message visibility
   const [isFadingOut, setIsFadingOut] = useState(false); // Track fade-out animation
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   const { user, token, logout } = useUserContext(); // Get user info, logout function and token
 
@@ -127,17 +138,28 @@ const Homepage = () => {
           )}
         </div>
         
-        {/* BUTTONS CONTAINER: Both buttons together for desktop, separated for mobile */}
-        <div className="header-buttons-container">
-          <div className="new-note-container">
+        {/* BUTTONS CONTAINER: Render based on screen size */}
+        {isMobile ? (
+          <div className="mobile-header-nav">
             <Link to="/create" className="btn btn-green">
-              + New Note
+              +
             </Link>
+            <button onClick={logout} className="btn btn-back">
+              Logout
+            </button>
           </div>
-          <button onClick={logout} className="btn btn-back header-logout-btn">
-            Logout
-          </button>
-        </div>
+        ) : (
+          <div className="header-buttons-container">
+            <div className="new-note-container">
+              <Link to="/create" className="btn btn-green">
+                + New Note
+              </Link>
+            </div>
+            <button onClick={logout} className="btn btn-back header-logout-btn">
+              Logout
+            </button>
+          </div>
+        )}
       </header>
 
       <div className="notes-list">
