@@ -57,6 +57,7 @@ const Homepage = () => {
   // Get username from email for welcome message
   const username = user?.email ? (() => {
     try {
+      // NOTE: Using the getUsernameFromEmail helper function you defined
       return getUsernameFromEmail(user.email);
     } catch (err) {
       console.error('Error extracting username:', err);
@@ -127,11 +128,13 @@ const Homepage = () => {
           )}
         </div>
         
-        {/* BUTTONS CONTAINER: Both buttons together for desktop, separated for mobile */}
+        {/* BUTTONS CONTAINER: Both buttons together */}
         <div className="header-buttons-container">
           <div className="new-note-container">
-            <Link to="/create" className="btn btn-green">
-              + New Note
+            {/* UPDATED LINK: Added class and wrapped 'New Note' in a span */}
+            <Link to="/create" className="btn btn-green new-note-btn">
+              + 
+              <span className="new-note-text">New Note</span>
             </Link>
           </div>
           <button onClick={logout} className="btn btn-back header-logout-btn">

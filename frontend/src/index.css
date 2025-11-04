@@ -6,13 +6,31 @@
   --on-surface: #e0e0e0;
   --green: #4ade80;
   --red: #f87171;
+  /* NEW Variables for consistency and easier theming */
+  --border-color: var(--primary);
+  --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Global Reset and Accessibility Focus */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Reset default outline to use custom focus below */
+  outline: none; 
 }
+
+/* Custom Focus State for Accessibility (Applies to all interactive elements) */
+.btn:focus-visible,
+.welcome-close-btn:focus-visible,
+.note-card:focus-visible,
+.auth-footer a:focus-visible,
+.form-group input:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 2px solid var(--green); /* Bright, visible focus ring */
+  outline-offset: 2px;
+}
+
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -20,6 +38,7 @@ body {
   background-color: var(--background);
   color: var(--on-surface);
   min-height: 100vh;
+  font-weight: 400; /* Ensures consistent rendering */
 }
 
 /* Page Wrapper */
@@ -36,7 +55,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  flex-wrap: wrap; /* Allows elements to wrap on small screens */
+  flex-wrap: wrap; 
 }
 
 .header-title-section {
@@ -125,7 +144,7 @@ body {
 /* === Note Card === */
 .note-card {
   background-color: var(--surface);
-  border: 1px solid var(--primary);
+  border: 1px solid var(--border-color); /* Updated variable */
   padding: 1.5rem;
   border-radius: 12px;
   text-decoration: none;
@@ -176,7 +195,7 @@ body {
 
 .btn-back {
   background: none;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--border-color); /* Updated variable */
   color: var(--on-surface);
   padding: 0.5rem 1rem;
 }
@@ -212,7 +231,7 @@ body {
 .form-group textarea {
   width: 100%;
   background-color: var(--surface);
-  border: 1px solid var(--primary);
+  border: 1px solid var(--border-color); /* Updated variable */
   color: var(--on-surface);
   padding: 1rem;
   border-radius: 8px;
@@ -236,8 +255,8 @@ body {
   padding: 2rem;
   background-color: var(--surface);
   border-radius: 12px;
-  /* Optional subtle shadow for depth */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+  /* Use new shadow variable */
+  box-shadow: 0 4px 10px var(--shadow-color); 
 }
 
 .auth-form-container h2 {
@@ -290,13 +309,29 @@ body {
   flex-shrink: 0;
 }
 
+/* Specific styling for the new note button */
+.new-note-btn {
+    /* Desktop default: shows text and icon inline */
+    display: inline-flex; 
+    align-items: center;
+    gap: 0.3rem; 
+}
+
+/* The text span is visible by default on desktop */
+.new-note-text {
+    display: inline; 
+}
+
+
 /* === Mobile Stacking Logic (Max-width 600px) === */
 @media (max-width: 600px) {
+  
   .home-header {
-    /* Mobile: Position title and logout on same row */
-    flex-wrap: wrap;
+    /* Ensure title and buttons are on one row (no wrap) */
+    flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center; 
+    margin-bottom: 1.5rem; 
   }
 
   .header-title-section {
@@ -304,11 +339,9 @@ body {
   }
   
   .home-header h1 {
-    /* Title takes available space but allows logout to sit on right */
     font-size: 2rem;
-    margin: 0;
   }
-  
+
   .welcome-message {
     font-size: 0.85rem;
   }
@@ -318,31 +351,38 @@ body {
     width: 18px;
     height: 18px;
   }
-  
+
+  /* BUTTONS CONTAINER: Keep both buttons horizontal and on the right */
   .header-buttons-container {
-    /* Mobile: Separate buttons - logout next to title, new note below */
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0;
+    flex-direction: row; 
+    gap: 0.75rem; 
   }
   
+  /* Logout button is smaller for mobile */
   .header-logout-btn {
-    /* Mobile: Position logout button in top right corner, next to title */
-    margin-top: 0.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.8rem;
     font-size: 0.9rem;
   }
 
-  /* Keep the + New Note button in its original position below the header */
-  .new-note-container {
-      order: 1; /* Forces it below the h1 and logout button */
-      width: 100%;
-      margin-top: 1rem;
-      justify-content: center; /* Centers the button on small screen */
+  /* NEW NOTE BUTTON: Icon-only styling (square/circle) */
+  .new-note-container .btn {
+    height: 38px;
+    width: 38px;
+    padding: 0; 
+    border-radius: 50%; /* Makes it a clean circle */
+    font-size: 1.5rem; /* Large '+' sign */
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* HIDE THE TEXT LABEL ON MOBILE */
+  .new-note-text {
+      display: none; 
   }
   
-  .new-note-container .btn {
-      width: 100%; /* Makes the New Note button full width */
-      text-align: center;
+  /* Reset container properties that were used for desktop layout */
+  .new-note-container {
+      flex-shrink: 0;
   }
 }
