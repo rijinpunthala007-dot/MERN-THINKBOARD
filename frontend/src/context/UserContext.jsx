@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   // Try to load user info from local storage on initial load
   const getInitialUser = () => {
     try {
-      const raw = localStorage.getItem('user');
+      const raw = localStorage.getItem('userInfo');
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
@@ -25,13 +25,13 @@ export const UserProvider = ({ children }) => {
   // 3. Login function: Saves user info and token to state and local storage
   const login = (userInfo) => {
     setUser(userInfo);
-    try { localStorage.setItem('user', JSON.stringify(userInfo)); } catch {}
+    try { localStorage.setItem('userInfo', JSON.stringify(userInfo)); } catch {}
   };
 
   // 4. Logout function: Clears state and local storage
   const logout = () => {
     setUser(null);
-    try { localStorage.removeItem('user'); } catch {}
+    try { localStorage.removeItem('userInfo'); } catch {}
   };
 
   // 5. The value provided to components
