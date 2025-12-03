@@ -2,8 +2,8 @@ import axios from "axios";
 
 // 1. Create the Axios instance
 const API = axios.create({
-  // Use your live Render URL for the API
-  baseURL: "https://thinkboard-mern-z5d1.onrender.com/api", 
+  // Use environment variable or fallback to local
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 });
 
 // 2. Add an Interceptor to attach the JWT token to every request
@@ -11,7 +11,7 @@ API.interceptors.request.use((req) => {
   try {
     // Get user info (which includes the token) from local storage
     const userInfo = localStorage.getItem('userInfo');
-    
+
     if (userInfo) {
       const user = JSON.parse(userInfo);
       // Attach the token to the Authorization header
@@ -22,7 +22,7 @@ API.interceptors.request.use((req) => {
   } catch (error) {
     console.error('Error accessing localStorage in API interceptor:', error);
   }
-  
+
   return req;
 });
 
